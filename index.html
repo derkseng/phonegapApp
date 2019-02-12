@@ -6,29 +6,162 @@
 <input class='search-key' type="text"/>
 <ul class='employee-list'></ul>
 </div>
+  <div>GPS</div>
+    <button onclick="gps()" id="st">gps</button><br>
+    <button onclick="pos()" id="st3">my position</button><br>
+    <button onclick="gps_end()" id="st2">gps end</button><br>
+    <button onclick="stats()" id="st5">status</button><br>`
+
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript">`
+    function onDeviceReady() {
+    BackgroundGeolocation.configure({
+    locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
+    desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
+    stationaryRadius: 50,
+    distanceFilter: 50,
+    notificationTitle: 'Background tracking',
+    notificationText: 'enabled',
+    debug: true,
+    interval: 10000,
+    fastestInterval: 5000,
+    activitiesInterval: 10000,
+    url: 'xxxxx',
+    httpHeaders: {
+      'X-FOO': 'bar'
+    },
+    // customize post properties
+    postTemplate: {
+      lat: '@latitude',
+      lon: '@longitude',
+      foo: 'bar' // you can also add your own properties
+    }
+    });
+
+    BackgroundGeolocation.on('location', function(location) {
+    // handle your locations here
+    // to perform long running operation on iOS
+    // you need to create background task
+    BackgroundGeolocation.startTask(function(taskKey) {
+      // execute long running task
+      // eg. ajax post location
+      // IMPORTANT: task has to be ended by endTask
+      BackgroundGeolocation.endTask(taskKey);
+    });
+    });
+
+    BackgroundGeolocation.on('stationary', function(stationaryLocation) {
+    // handle stationary locations here
+    });
+
+    BackgroundGeolocation.on('error', function(error) {
+    console.log('[ERROR] BackgroundGeolocation error:', error.code, 
+    error.message);
+     });
+
+    BackgroundGeolocation.on('start', function() {
+    console.log('[INFO] BackgroundGeolocation service has been started');
+    });
+
+    BackgroundGeolocation.on('stop', function() {
+    console.log('[INFO] BackgroundGeolocation service has been stopped');
+    });
+
+    BackgroundGeolocation.on('authorization', function(status) {
+    console.log('[INFO] BackgroundGeolocation authorization status: ' + status);
+    if (status !== BackgroundGeolocation.AUTHORIZED) {
+
+      setTimeout(function() {
+        var showSettings = confirm('App requires location tracking permission. 
+        Would you like to open app settings?');
+        if (showSetting) {
+          return BackgroundGeolocation.showAppSettings();
+        }
+        }, 1000);
+        }
+        });
+
+       BackgroundGeolocation.on('background', function() {
+    console.log('[INFO] App is in background');
+    // you can also reconfigure service (changes will be applied immediately)
+    BackgroundGeolocation.configure({ debug: true });
+    });
+
+    BackgroundGeolocation.on('foreground', function() {
+    console.log('[INFO] App is in foreground');
+    BackgroundGeolocation.configure({ debug: false });
+      });
+
+    BackgroundGeolocation.checkStatus(function(status) {
+    console.log('[INFO] BackgroundGeolocation service is running', 
+    status.isRunning);
+    console.log('[INFO] BackgroundGeolocation services enabled', 
+    status.locationServicesEnabled);
+    console.log('[INFO] BackgroundGeolocation auth status: ' + 
+        status.authorization);
+      alert("entre a la funcion checkstatus")
+
+    // you don't need to check status before start (this is just the example)
+    if (!status.isRunning) {
+      BackgroundGeolocation.start(); //triggers start on start event
+    }
+     });
+
+    }
+
+      document.addEventListener('deviceready', onDeviceReady, false);
+
+      function gps(){
+      alert("Starts GPS")
+            BackgroundGeolocation.start();
+            BackgroundGeolocation.checkStatus();
+       alert ("GPS ON")
+                    }
+
+
+
+
+    function gps_end(){
+     BackgroundGeolocation.checkStatus();
+        alert("Ending gps")
+     BackgroundGeolocation.stop();
+    alert("No Gps")
+                    }
+
+
+     function pos() {
+      alert("start pos function")
+        BackgroundGeolocation.getCurrentLocation(
+            function (locations) {
+                alert(locations.latitude);
+                                 }); 
+                }
+
+       function stats() {
+              BackgroundGeolocation.checkStatus();
+              var watchID = BackgroundGeolocation.getCurrentLocation(onSuccess, 
+    onError, options);
+                function onSuccess(position) {
+                                                BackgroundGeolocation.start();
+                                                lat=position.coords.latitude;
+                                                long=position.coords.longitude;
+                                                alert(long)         
+                                             }
+                    }
+
+    function onError(position){
+
+    show_alert('GPS','Unable to load GPS data.'+position.message,'OK'); 
+                                }   
+
+
+     </script>
 
 <script src="lib/jquery-1.8.2.min.js"></script>
 <script src="js/storage/memory-store.js"></script>
 <script src="js/main.js"></script>
 <script src="cordova.js"></script>
-  <script>
-  Function butTakePicture_onclick()
-    options={quality : 75, _
-      destinationType : 1, _
-      sourceType : 1, _
-      allowEdit: true}
-    navigator.camera.getPicture(onPictureReturned, onPictureError, options)
-  End Function
-
-  Function onPictureReturned(ImageURI)
-    Image1.src=ImageURI
-  End Function
-
-  Function onPictureError(message)
-    MsgBox "Failed because " & message
-  End Function
   
-  </script>
 
 </body>
 </html>
