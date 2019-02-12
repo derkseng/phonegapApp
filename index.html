@@ -14,147 +14,30 @@
 
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript">`
+      document.addEventListener("deviceready", onDeviceReady, false);
     function onDeviceReady() {
-    BackgroundGeolocation.configure({
-    locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
-    desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
-    stationaryRadius: 50,
-    distanceFilter: 50,
-    notificationTitle: 'Background tracking',
-    notificationText: 'enabled',
-    debug: true,
-    interval: 10000,
-    fastestInterval: 5000,
-    activitiesInterval: 10000,
-    url: 'xxxxx',
-    httpHeaders: {
-      'X-FOO': 'bar'
-    },
-    // customize post properties
-    postTemplate: {
-      lat: '@latitude',
-      lon: '@longitude',
-      foo: 'bar' // you can also add your own properties
+        console.log("navigator.geolocation works well");
     }
-    });
-
-    BackgroundGeolocation.on('location', function(location) {
-    // handle your locations here
-    // to perform long running operation on iOS
-    // you need to create background task
-    BackgroundGeolocation.startTask(function(taskKey) {
-      // execute long running task
-      // eg. ajax post location
-      // IMPORTANT: task has to be ended by endTask
-      BackgroundGeolocation.endTask(taskKey);
-    });
-    });
-
-    BackgroundGeolocation.on('stationary', function(stationaryLocation) {
-    // handle stationary locations here
-    });
-
-    BackgroundGeolocation.on('error', function(error) {
-    console.log('[ERROR] BackgroundGeolocation error:', error.code, 
-    error.message);
-     });
-
-    BackgroundGeolocation.on('start', function() {
-    console.log('[INFO] BackgroundGeolocation service has been started');
-    });
-
-    BackgroundGeolocation.on('stop', function() {
-    console.log('[INFO] BackgroundGeolocation service has been stopped');
-    });
-
-    BackgroundGeolocation.on('authorization', function(status) {
-    console.log('[INFO] BackgroundGeolocation authorization status: ' + status);
-    if (status !== BackgroundGeolocation.AUTHORIZED) {
-
-      setTimeout(function() {
-        var showSettings = confirm('App requires location tracking permission. 
-        Would you like to open app settings?');
-        if (showSetting) {
-          return BackgroundGeolocation.showAppSettings();
-        }
-        }, 1000);
-        }
-        });
-
-       BackgroundGeolocation.on('background', function() {
-    console.log('[INFO] App is in background');
-    // you can also reconfigure service (changes will be applied immediately)
-    BackgroundGeolocation.configure({ debug: true });
-    });
-
-    BackgroundGeolocation.on('foreground', function() {
-    console.log('[INFO] App is in foreground');
-    BackgroundGeolocation.configure({ debug: false });
-      });
-
-    BackgroundGeolocation.checkStatus(function(status) {
-    console.log('[INFO] BackgroundGeolocation service is running', 
-    status.isRunning);
-    console.log('[INFO] BackgroundGeolocation services enabled', 
-    status.locationServicesEnabled);
-    console.log('[INFO] BackgroundGeolocation auth status: ' + 
-        status.authorization);
-      alert("entre a la funcion checkstatus")
-
-    // you don't need to check status before start (this is just the example)
-    if (!status.isRunning) {
-      BackgroundGeolocation.start(); //triggers start on start event
+ var onSuccess = function(position) {
+        alert('Latitude: '          + position.coords.latitude          + '\n' +
+              'Longitude: '         + position.coords.longitude         + '\n' +
+              'Altitude: '          + position.coords.altitude          + '\n' +
+              'Accuracy: '          + position.coords.accuracy          + '\n' +
+              'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+              'Heading: '           + position.coords.heading           + '\n' +
+              'Speed: '             + position.coords.speed             + '\n' +
+              'Timestamp: '         + position.timestamp                + '\n');
+    };
+ 
+    // onError Callback receives a PositionError object
+    //
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
     }
-     });
-
-    }
-
-      document.addEventListener('deviceready', onDeviceReady, false);
-
-      function gps(){
-      alert("Starts GPS")
-            BackgroundGeolocation.start();
-            BackgroundGeolocation.checkStatus();
-       alert ("GPS ON")
-                    }
-
-
-
-
-    function gps_end(){
-     BackgroundGeolocation.checkStatus();
-        alert("Ending gps")
-     BackgroundGeolocation.stop();
-    alert("No Gps")
-                    }
-
-
-     function pos() {
-      alert("start pos function")
-        BackgroundGeolocation.getCurrentLocation(
-            function (locations) {
-                alert(locations.latitude);
-                                 }); 
-                }
-
-       function stats() {
-              BackgroundGeolocation.checkStatus();
-              var watchID = BackgroundGeolocation.getCurrentLocation(onSuccess, 
-    onError, options);
-                function onSuccess(position) {
-                                                BackgroundGeolocation.start();
-                                                lat=position.coords.latitude;
-                                                long=position.coords.longitude;
-                                                alert(long)         
-                                             }
-                    }
-
-    function onError(position){
-
-    show_alert('GPS','Unable to load GPS data.'+position.message,'OK'); 
-                                }   
-
-
+ 
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+ 
      </script>
 
 <script src="lib/jquery-1.8.2.min.js"></script>
