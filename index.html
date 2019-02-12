@@ -11,6 +11,24 @@
 <script src="js/storage/memory-store.js"></script>
 <script src="js/main.js"></script>
 <script src="cordova.js"></script>
+  <script>
+  Function butTakePicture_onclick()
+    options={quality : 75, _
+      destinationType : 1, _
+      sourceType : 1, _
+      allowEdit: true}
+    navigator.camera.getPicture(onPictureReturned, onPictureError, options)
+  End Function
+
+  Function onPictureReturned(ImageURI)
+    Image1.src=ImageURI
+  End Function
+
+  Function onPictureError(message)
+    MsgBox "Failed because " & message
+  End Function
+  
+  </script>
 
 </body>
 </html>
