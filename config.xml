@@ -15,6 +15,14 @@
         Gerry Derksen
     </author>
     <plugin name="cordova-plugin-camera" source="npm"  />
+        <gap:plugin name="cordova-plugin-camera" source="npm" >
+        <variable name="CAMERA_USAGE_DESCRIPTION" value="{id} camera use" />
+        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="{id}  photo use" />
+        </gap:plugin>
+
+        <gap:plugin name="cordova-plugin-geolocation" source="npm"  >
+        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="{id} Location use." />
+        </gap:plugin>
     <feature name="http://api.phonegap.com/1.0/camera"/>
     <feature name="http://api.phonegap.com/1.0/contacts"/>
     <feature name="http://api.phonegap.com/1.0/file"/>
